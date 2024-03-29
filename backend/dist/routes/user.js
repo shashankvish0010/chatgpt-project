@@ -14,8 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const dotenv_1 = __importDefault(require("dotenv"));
 const users = require('../models/users');
 const router = express_1.default.Router();
+dotenv_1.default.config();
 router.get('/start/be', (req, res) => res.json({ success: true, message: "BE started" }));
 router.post('/user/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { firstname, lastname, email, password, confirmpass } = req.body;
@@ -32,7 +35,7 @@ router.post('/user/register', (req, res) => __awaiter(void 0, void 0, void 0, fu
                 if (password == confirmpass) {
                     const salt = yield bcrypt_1.default.genSalt(10);
                     const hashpassword = yield bcrypt_1.default.hash(password, salt);
-                    const user = new users({ firstname, lastname, email, password });
+                    const user = new users({ firstname, lastname, email, password: hashpassword });
                     const result = yield user.save();
                     if (result) {
                         res.json({ success: true, message: "Regsistered successfully" });
@@ -44,6 +47,35 @@ router.post('/user/register', (req, res) => __awaiter(void 0, void 0, void 0, fu
                 else {
                     res.json({ success: false, message: "Password doesn't match" });
                 }
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+}));
+router.post('/user/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        res.json({ success: false, message: "Fill all the feilds" });
+    }
+    else {
+        try {
+            const isUserExists = yield users.findOne({ email });
+            if (isUserExists) {
+                console.log(isUserExists);
+                const isMatch = yield bcrypt_1.default.compare(password, isUserExists.password);
+                if (isMatch && process.env.USER_SECRET) {
+                    const token = jsonwebtoken_1.default.sign(isUserExists.id, process.env.USER_SECRET);
+                    res.cookie("user", token);
+                    res.json({ success: false, message: "Login successfully" });
+                }
+                else {
+                    res.json({ success: false, message: "Password is incorrect" });
+                }
+            }
+            else {
+                res.json({ success: false, message: "User doesn't exists" });
             }
         }
         catch (error) {
