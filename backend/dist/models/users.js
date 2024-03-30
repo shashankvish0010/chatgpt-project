@@ -22,6 +22,17 @@ const userschema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
+    prompts: [
+        {
+            prompt_name: {
+                type: String,
+                unique: true
+            },
+            prompt: {
+                type: String,
+            }
+        }
+    ],
     chats: [
         {
             chatId: { type: String },
