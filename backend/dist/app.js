@@ -12,4 +12,5 @@ app.use(express_1.default.json());
 app.use(require('./routes/user'));
 app.use(require('./routes/chatAi'));
 app.use(require('./routes/prompt'));
+app.use(require('./routes/search'));
 app.listen(process.env.PORT, () => console.log("Server running"));

@@ -3,6 +3,16 @@ import { Hercai } from 'hercai';
 const users = require('../models/users');
 const router = express.Router();
 
+interface chatsType {
+    chatId: String;
+    chatarray: [
+        {
+            question: String
+            response: String
+        }
+    ]
+}
+
 router.post('/chat/ai/:userid/:chatid', async (req, res) => {
     const { question } = req.body;
     const { userid, chatid } = req.params;
@@ -18,7 +28,7 @@ router.post('/chat/ai/:userid/:chatid', async (req, res) => {
                 if (response.reply) {
                     const user = await users.findOne({ _id: userid });
                     if (user) {
-                        const chatIndex = await user.chats.findIndex((chat: any) => chat.chatId === chatid);
+                        const chatIndex = await user.chats.findIndex((chat: chatsType) => chat.chatId === chatid);
                         if (chatIndex !== -1) {
                             await user.chats[chatIndex].chatarray.push({ question, response: response.reply });
                             const result = await user.save();
