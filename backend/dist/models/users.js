@@ -23,16 +23,19 @@ const userschema = new mongoose_1.default.Schema({
         required: true,
     },
     chats: [
-        [{
-                question: {
-                    required: true,
-                    type: String
-                },
-                response: {
-                    required: true,
-                    type: String
-                },
-            }]
+        {
+            chatId: { type: String },
+            chatarray: [{
+                    question: {
+                        required: true,
+                        type: String
+                    },
+                    response: {
+                        required: true,
+                        type: String
+                    },
+                }]
+        }
     ]
 });
 const users = mongoose_1.default.model("users", userschema);

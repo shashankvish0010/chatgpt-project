@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 
 const userschema = new mongoose.Schema({
-
     firstname: {
         type: String,
         required: true
@@ -20,16 +19,19 @@ const userschema = new mongoose.Schema({
         required: true,
     },
     chats: [
-        [{
-            question: {
-                required: true,
-                type: String
-            },
-            response: {
-                required: true,
-                type: String
-            },
-        }]
+        {
+            chatId: { type: String },
+            chatarray: [{
+                question: {
+                    required: true,
+                    type: String
+                },
+                response: {
+                    required: true,
+                    type: String
+                },
+            }]
+        }
     ]
 });
 

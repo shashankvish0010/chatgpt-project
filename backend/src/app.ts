@@ -5,5 +5,5 @@ const app: Express = express();
 dotenv.config();
 app.use(express.json());
 app.use(require('./routes/user'));
-
+app.use(require('./routes/chatAi'));
 app.listen(process.env.PORT, ()=> console.log("Server running"));

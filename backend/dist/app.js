@@ -10,4 +10,5 @@ const app = (0, express_1.default)();
 dotenv_1.default.config();
 app.use(express_1.default.json());
 app.use(require('./routes/user'));
+app.use(require('./routes/chatAi'));
 app.listen(process.env.PORT, () => console.log("Server running"));
