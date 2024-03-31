@@ -32,14 +32,28 @@ router.post('/chat/ai/:userid/:chatid', async (req, res) => {
                         if (chatIndex !== -1) {
                             await user.chats[chatIndex].chatarray.push({ question, response: response.reply });
                             const result = await user.save();
+                            const updatedUser = await users.findOne({_id: userid})
+                            const chatarray : any[] = []; 
+                            updatedUser.chats.map((data: any) => {
+                                if(data.chatId == chatid) {
+                                    chatarray.push(data);
+                                }
+                            });
                             if (result) {
-                                res.json({ success: true, message: "Chat saved" })
+                                res.json({ success: true,chatarray , message: "Chat saved" })
                             }
                         } else {
                             await user.chats.push({ chatId: chatid, chatarray: [{ question, response: response.reply }] });
                             const result = await user.save();
-                            if (result) {
-                                res.json({ success: true, message: "New Chat saved" })
+                            const updatedUser = await users.findOne({_id: userid})                           
+                            const chatarray : any[] = []; 
+                            updatedUser.chats.map((data: any) => {
+                                if(data.chatId == chatid) {
+                                    chatarray.push(data);
+                                }
+                            });
+                            if (result && chatarray) {
+                                res.json({ success: true, chatarray, message: "New Chat saved" })
                             }
                         }
                     }

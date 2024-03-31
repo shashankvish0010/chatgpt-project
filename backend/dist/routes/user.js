@@ -63,12 +63,11 @@ router.post('/user/login', (req, res) => __awaiter(void 0, void 0, void 0, funct
         try {
             const isUserExists = yield users.findOne({ email });
             if (isUserExists) {
-                console.log(isUserExists);
                 const isMatch = yield bcrypt_1.default.compare(password, isUserExists.password);
                 if (isMatch && process.env.USER_SECRET) {
                     const token = jsonwebtoken_1.default.sign(isUserExists.id, process.env.USER_SECRET);
                     res.cookie("user", token);
-                    res.json({ success: false, message: "Login successfully" });
+                    res.json({ success: true, userdata: isUserExists, message: "Login successfully" });
                 }
                 else {
                     res.json({ success: false, message: "Password is incorrect" });

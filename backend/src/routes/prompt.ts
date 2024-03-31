@@ -8,12 +8,12 @@ interface promptType {
 }
 
 router.post('/save/prompt/:userid', async (req, res) => {
-    const { prompt_name, prompt } = req.body;
+    const { prompt_name, promptq } = req.body;
     const { userid } = req.params;
     if (!userid) {
         res.json({ success: false, message: "Please login to access." });
     } else {
-        if (!prompt_name || !prompt) {
+        if (!prompt_name || !promptq) {
             res.json({ success: false, message: "Provide valid name and prompt." });
         } else {
             const user = await users.findOne({ _id: userid });
@@ -22,7 +22,7 @@ router.post('/save/prompt/:userid', async (req, res) => {
                 if (chatIndex !== -1) {
                     res.json({ success: false, message: "Prompt name already exists." });
                 } else {
-                    await user.prompts.push({ prompt_name, prompt });
+                    await user.prompts.push({ prompt_name, prompt: promptq });
                     const result = await user.save();
                     if (result) {
                         res.json({ success: true, message: "Prompt saved." });

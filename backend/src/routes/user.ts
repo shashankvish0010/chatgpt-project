@@ -40,24 +40,22 @@ router.post('/user/register', async (req, res) => {
 })
 
 router.post('/user/login', async (req, res) => {
-    const {email, password} = req.body;
-    if(!email || ! password) {
+    const { email, password } = req.body;
+    if (!email || !password) {
         res.json({ success: false, message: "Fill all the feilds" });
     } else {
         try {
-            const isUserExists = await users.findOne({email});
-            if(isUserExists) {
-                console.log(isUserExists);
-                
+            const isUserExists = await users.findOne({ email });
+            if (isUserExists) {
                 const isMatch = await bcrypt.compare(password, isUserExists.password);
-                if(isMatch && process.env.USER_SECRET) {
+                if (isMatch && process.env.USER_SECRET) {
                     const token = jwt.sign(isUserExists.id, process.env.USER_SECRET);
                     res.cookie("user", token)
-                    res.json({ success: false, message: "Login successfully" });
-                }else {
+                    res.json({ success: true, userdata: isUserExists, message: "Login successfully" });
+                } else {
                     res.json({ success: false, message: "Password is incorrect" });
                 }
-            }else {
+            } else {
                 res.json({ success: false, message: "User doesn't exists" });
             }
         } catch (error) {

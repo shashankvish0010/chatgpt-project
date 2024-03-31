@@ -16,13 +16,13 @@ const express_1 = __importDefault(require("express"));
 const users = require('../models/users');
 const router = express_1.default.Router();
 router.post('/save/prompt/:userid', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { prompt_name, prompt } = req.body;
+    const { prompt_name, promptq } = req.body;
     const { userid } = req.params;
     if (!userid) {
         res.json({ success: false, message: "Please login to access." });
     }
     else {
-        if (!prompt_name || !prompt) {
+        if (!prompt_name || !promptq) {
             res.json({ success: false, message: "Provide valid name and prompt." });
         }
         else {
@@ -33,7 +33,7 @@ router.post('/save/prompt/:userid', (req, res) => __awaiter(void 0, void 0, void
                     res.json({ success: false, message: "Prompt name already exists." });
                 }
                 else {
-                    yield user.prompts.push({ prompt_name, prompt });
+                    yield user.prompts.push({ prompt_name, prompt: promptq });
                     const result = yield user.save();
                     if (result) {
                         res.json({ success: true, message: "Prompt saved." });
