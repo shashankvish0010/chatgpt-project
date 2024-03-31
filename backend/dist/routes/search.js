@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const users = require('../models/users');
 const router = express_1.default.Router();
-router.get('/chat/search/:userid', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/chat/search/:userid', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { query } = req.body;
     const { userid } = req.params;

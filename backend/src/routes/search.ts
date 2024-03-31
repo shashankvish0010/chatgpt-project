@@ -8,7 +8,7 @@ interface chatType {
     response: String;
 }
 
-router.get('/chat/search/:userid', async (req, res) => {
+router.post('/chat/search/:userid', async (req, res) => {
     const { query } = req.body;
     const { userid } = req.params;
     if (!userid) {
